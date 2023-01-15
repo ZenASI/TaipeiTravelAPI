@@ -54,7 +54,10 @@ class DetailFragment : Fragment() {
         }
 
         arguments?.let { bundle ->
-            val item = bundle.getParcelable("attraction", ItemAttraction::class.java)
+            val item = if (Build.VERSION.SDK_INT >= 33) bundle.getParcelable(
+                "attraction",
+                ItemAttraction::class.java
+            ) else bundle.getParcelable("attraction")
             title.text = item?.name
             topBar.setTitle(item?.name)
             content.text = item?.introduction
