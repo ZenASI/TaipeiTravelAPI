@@ -6,6 +6,16 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        release {
+            storeFile file("../gradle/jks/taipeitravalapi.jks")
+            storePassword 'taipeitravalapi'
+            keyAlias 'key0'
+            keyPassword 'taipeitravalapi'
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
+    }
     namespace 'com.example.taipeitravelapi'
     compileSdk 33
 
@@ -17,11 +27,13 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        signingConfig signingConfigs.release
     }
 
     buildTypes {
         release {
-            minifyEnabled false
+            shrinkResources true
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
