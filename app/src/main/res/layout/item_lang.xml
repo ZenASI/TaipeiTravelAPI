@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.AppCompatTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/langText"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textColor="@color/black"
+    tools:text="@string/app_name"
+    android:textSize="16sp"
+    android:layout_gravity="start|center"
+    android:paddingHorizontal="10dp"
+    android:paddingVertical="20dp">
+
+</androidx.appcompat.widget.AppCompatTextView>
