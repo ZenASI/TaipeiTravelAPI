@@ -50,5 +50,5 @@ class CustomBanner(context: Context, attrs: AttributeSet?) : RecyclerView(contex
     fun showBanner() = run { this.visibility = View.VISIBLE }
 
     fun release() =
-        kotlin.run { if (scheduledExecutorService != null) scheduledExecutorService.shutdown() }
+        run { if (scheduledExecutorService != null) scheduledExecutorService.shutdown() }
 }

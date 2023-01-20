@@ -10,10 +10,12 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.taipeitravelapi.R
+import com.example.taipeitravelapi.databinding.FragmentDetailBinding
 import com.example.taipeitravelapi.model.ItemAttraction
 import com.example.taipeitravelapi.ui.customview.CustomBanner
 import com.example.taipeitravelapi.ui.customview.CustomTopBar
 import dagger.hilt.android.AndroidEntryPoint
+import java.lang.ref.WeakReference
 
 @AndroidEntryPoint
 class DetailFragment : Fragment() {
@@ -23,12 +25,7 @@ class DetailFragment : Fragment() {
     }
 
     private val viewModel: MainViewModel by activityViewModels()
-
-    private lateinit var title: AppCompatTextView
-    private lateinit var content: AppCompatTextView
-    private lateinit var link: AppCompatTextView
-    private lateinit var topBar: CustomTopBar
-    private lateinit var banner: CustomBanner
+    private var binding: FragmentDetailBinding? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,19 +35,15 @@ class DetailFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.fragment_detail, container, false)
+        binding = FragmentDetailBinding.inflate(inflater, container, false)
+        return binding!!.root
     }
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        banner = view.findViewById(R.id.detailBanner)
-        title = view.findViewById(R.id.detailTitle)
-        content = view.findViewById(R.id.detailContent)
-        link = view.findViewById(R.id.detailLink)
-
-        topBar = view.findViewById<CustomTopBar?>(R.id.topbar).apply {
-            showBackBtn()
+        binding?.let {
+            it.detailBanner.showBanner()
+            it.topbar.root.showBackBtn()
         }
 
         arguments?.let { bundle ->
@@ -58,20 +51,23 @@ class DetailFragment : Fragment() {
                 "attraction",
                 ItemAttraction::class.java
             ) else bundle.getParcelable("attraction")
-            title.text = item?.name
-            topBar.setTitle(item?.name)
-            content.text = item?.introduction
-            link.text = item?.url
+            binding?.let {
+                it.detailTitle.text = item?.name
+                it.detailContent.text = item?.introduction
+                it.detailLink.text = item?.url
+                it.topbar.root.setTitle(item?.name)
+            }
 
             item?.images?.let {
-                banner.showBanner()
-                banner.setBannerData(it)
+                binding?.detailBanner?.showBanner()
+                binding?.detailBanner?.setBannerData(it)
             }
         }
     }
 
     override fun onDestroyView() {
-        banner.release()
+        binding?.detailBanner?.release()
+        binding = null
         super.onDestroyView()
     }
 }

@@ -11,8 +11,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.taipeitravelapi.R
 import com.example.taipeitravelapi.adapter.MainAdapter
+import com.example.taipeitravelapi.databinding.FragmentMainBinding
 import com.example.taipeitravelapi.ui.customview.CustomTopBar
 import dagger.hilt.android.AndroidEntryPoint
+import java.lang.ref.WeakReference
 
 
 @AndroidEntryPoint
@@ -23,13 +25,9 @@ class MainFragment : Fragment() {
     }
 
     private val viewModel: MainViewModel by activityViewModels()
+    private var binding: FragmentMainBinding? = null
 
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var topBar: CustomTopBar
-
-    private val adapter by lazy {
-        MainAdapter(mutableListOf())
-    }
+    private var adapter: MainAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,24 +37,29 @@ class MainFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.fragment_main, container, false)
+        binding = FragmentMainBinding.inflate(inflater, container, false)
+        return binding!!.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        recyclerView = view.findViewById(R.id.recyclerView) as RecyclerView
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        recyclerView.adapter = adapter
-
-        topBar = view.findViewById<CustomTopBar?>(R.id.topbar).apply {
-            showLangBtn()
-            setTitle(getString(R.string.app_name))
+        adapter = MainAdapter(mutableListOf())
+        binding?.let {
+            it.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+            it.recyclerView.adapter = adapter
+            it.topbar.root.showLangBtn()
+            it.topbar.root.setTitle(getString(R.string.app_name))
         }
 
         viewModel.attractionList.observe(viewLifecycleOwner) {
             if (it.isNullOrEmpty()) return@observe
-            adapter.replaceData(it)
+            adapter?.replaceData(it)
         }
+    }
+
+    override fun onDestroyView() {
+        binding = null
+        adapter = null
+        super.onDestroyView()
     }
 }

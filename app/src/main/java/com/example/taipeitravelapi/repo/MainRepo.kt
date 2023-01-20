@@ -1,6 +1,5 @@
 package com.example.taipeitravelapi.repo
 
-import com.example.taipeitravelapi.LangDef
 import com.example.taipeitravelapi.model.BaseResponse
 import com.example.taipeitravelapi.module.AppApiModule
 import com.example.taipeitravelapi.utils.ApiResult
