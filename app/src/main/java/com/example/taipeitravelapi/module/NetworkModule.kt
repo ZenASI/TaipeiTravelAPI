@@ -1,6 +1,7 @@
 package com.example.taipeitravelapi.module
 
 import android.util.Log
+import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,7 +32,7 @@ class NetworkModule {
 
     @Singleton
     @Provides
-    fun provideGsonConvert(): GsonConverterFactory = GsonConverterFactory.create()
+    fun provideGsonConvert(gson: Gson): GsonConverterFactory = GsonConverterFactory.create(gson)
 
 
     @Named("API")
